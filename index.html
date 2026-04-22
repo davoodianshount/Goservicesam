@@ -138,7 +138,7 @@
   }
   .hero-stat{text-align:center;border-right:1px solid rgba(255,255,255,.08)}
   .hero-stat:last-child{border-right:0}
-  .hero-stat b{display:block;font-family:'Archivo Black';font-size:20px;color:#fff;letter-spacing:-.01em}
+  .hero-stat b{display:block;font-family:'Archivo Black';font-size:17px;color:#fff;letter-spacing:-.01em;line-height:1.1}
   .hero-stat small{display:block;font-size:10.5px;color:#8fa0c2;letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
   /* TRUST STRIP */
   .trust-strip{
@@ -575,6 +575,95 @@
   html { scroll-behavior: smooth; }
   /* Make the form's submit button state reset after 4s so users can retry */
   .btn-submit:disabled { opacity: .7; cursor: not-allowed; }
+
+  /* ====== Three-button CTA (Call / Text / Estimate) ====== */
+  .cta-three{
+    display:flex;flex-direction:column;gap:10px;margin:4px 0;
+  }
+  .cta-three .btn{width:100%;padding:14px 14px;font-size:15px}
+  .cta-three .btn svg{width:18px;height:18px;flex:0 0 18px}
+  .btn-outline{
+    background:#fff;color:var(--navy-ink);
+    border:1.5px solid #d6dae5;
+  }
+  .btn-outline:hover{border-color:var(--navy-ink)}
+  .cta-three.on-dark .btn-outline{
+    background:rgba(255,255,255,.06);color:#fff;
+    border:1.5px solid rgba(255,255,255,.22);
+    backdrop-filter:blur(6px);
+  }
+  @media (min-width:768px){
+    .cta-three{flex-direction:row;gap:10px}
+    .cta-three .btn{flex:1 1 0}
+  }
+
+  /* ====== Quote modal ====== */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:100;
+    display:none;align-items:center;justify-content:center;
+    background:rgba(11,30,63,.65);
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    padding:16px;
+    opacity:0;transition:opacity .18s ease-out;
+  }
+  .modal-overlay.open{display:flex}
+  .modal-overlay.visible{opacity:1}
+  .modal{
+    background:#fff;color:var(--ink);
+    border-radius:16px;width:100%;max-width:480px;
+    padding:28px 22px 22px;position:relative;
+    box-shadow:0 30px 80px -20px rgba(11,30,63,.5);
+    max-height:calc(100vh - 32px);overflow-y:auto;
+    transform:scale(.96);transition:transform .18s ease-out;
+  }
+  .modal-overlay.visible .modal{transform:scale(1)}
+  .modal h3{
+    font-family:'Archivo Black';font-size:22px;
+    color:var(--navy-ink);margin:0 0 6px;letter-spacing:-.01em;
+    line-height:1.15;
+  }
+  .modal .modal-sub{color:var(--muted);font-size:13px;margin:0 0 16px;line-height:1.45}
+  .modal-close{
+    position:absolute;top:10px;right:10px;
+    width:34px;height:34px;border-radius:50%;
+    border:0;background:#f0f2f7;color:var(--navy-ink);
+    font-size:20px;cursor:pointer;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    font-family:inherit;
+  }
+  .modal-close:hover{background:#e4e8f0}
+  .modal .field label{
+    color:var(--navy-ink);letter-spacing:.1em;
+  }
+  .modal .field input,
+  .modal .field select{
+    background:#f6f7fb;color:var(--ink);
+    border:1.5px solid var(--line);
+  }
+  .modal .field input::placeholder{color:#8a95ae}
+  .modal .field select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%230B1E3F' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  }
+  .modal .field input:focus,
+  .modal .field select:focus{outline:none;border-color:var(--blue)}
+  .modal .btn-submit{padding:14px;margin-top:4px}
+  .modal .fallback-call{
+    display:block;text-align:center;margin-top:12px;
+    color:var(--muted);font-size:12.5px;
+  }
+  .modal .fallback-call a{color:var(--blue);text-decoration:none;font-weight:600}
+  .modal .agree{color:var(--muted)}
+  .modal .success-state{display:none;text-align:center;padding:30px 10px 10px}
+  .modal.is-success .form-state{display:none}
+  .modal.is-success .success-state{display:block}
+  .modal .success-state .check{
+    width:64px;height:64px;border-radius:50%;background:#29d57a;color:#fff;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+  }
+  .modal .success-state .check svg{width:32px;height:32px}
+  .modal .success-state h3{margin-bottom:8px}
+  .modal .success-state p{color:var(--muted);margin:0;font-size:13.5px}
+  body.modal-open{overflow:hidden}
 </style>
 </head>
 <body>
@@ -623,21 +712,25 @@
     </h1>
     <p class="hero-sub">Licensed C10 contractor. Upfront pricing, clean work, and same-day service across LA County.</p>
 
-    <div class="cta-stack">
-      <a class="btn btn-primary" href="tel:+18189342824">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-        Call Now · (818) 934-2824
+    <div class="cta-three on-dark">
+      <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        Call Now
       </a>
-      <a class="btn btn-ghost" href="#quote">
-        Get a Free Estimate
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Text Sam
       </a>
+      <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        Free Estimate
+      </button>
     </div>
 
     <div class="hero-stats">
-      <div class="hero-stat"><b>4.9★</b><small>500+ Reviews</small></div>
+      <div class="hero-stat"><b>C10 Licensed</b><small>Bonded &amp; Insured</small></div>
       <div class="hero-stat"><b>60 min</b><small>Avg Arrival</small></div>
-      <div class="hero-stat"><b>12 yrs</b><small>In LA</small></div>
+      <div class="hero-stat"><b>Free</b><small>Estimates</small></div>
     </div>
   </section>
 
@@ -838,43 +931,25 @@
     </div>
   </div>
 
-  <!-- CTA + FORM -->
+  <!-- CTA SECTION -->
   <section id="quote">
     <div class="cta-form">
       <h2>Need an electrician today?</h2>
-      <p>Call for the fastest response, or request a free estimate in 30 seconds.</p>
-      <a class="btn btn-primary" href="tel:+18189342824" style="width:100%">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-        Call (818) 934-2824
-      </a>
-      <div class="or">OR REQUEST ESTIMATE</div>
-      <form id="quoteForm" onsubmit="return submitQuote(event)">
-        <!-- Web3Forms access key — replace with key registered to Sam@goservicesam.com -->
-        <input type="hidden" name="access_key" value="11ac3944-7c91-4632-9b00-2c6071c85345">
-        <input type="hidden" name="subject" value="New lead from goservicesam.com">
-        <input type="hidden" name="from_name" value="Service Sam Electric Website">
-        <input type="hidden" name="redirect" value="false">
-        <!-- honeypot: bots will fill this, real users won't; submissions silently discarded -->
-        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
-        <div class="field"><label>Your name</label><input type="text" name="name" placeholder="Alex Garcia" required=""></div>
-        <div class="field"><label>Phone</label><input type="tel" name="phone" placeholder="(818) 555-0000" required=""></div>
-        <div class="field">
-          <label>Service needed</label>
-          <select name="service" required="">
-            <option value="">Select a service…</option>
-            <option>Emergency repair</option>
-            <option>Panel upgrade</option>
-            <option>EV charger install</option>
-            <option>Troubleshooting</option>
-            <option>Lighting</option>
-            <option>Rewiring</option>
-            <option>Commercial</option>
-            <option>Something else</option>
-          </select>
-        </div>
-        <button class="btn-submit" type="submit">Get My Free Estimate →</button>
-        <div class="agree">No spam. We'll call or text within 15 min during business hours. By submitting, you agree to be contacted by Service Sam Electric at the number provided.</div>
-      </form>
+      <p>Call or text for the fastest response, or request a free estimate in 30 seconds.</p>
+      <div class="cta-three on-dark">
+        <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          Call Now
+        </a>
+        <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          Text Sam
+        </a>
+        <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Free Estimate
+        </button>
+      </div>
     </div>
   </section>
 </div><!-- /.home -->
@@ -906,9 +981,19 @@
     <li>Most issues resolved same-visit</li>
     <li>Written safety report when we leave</li>
   </ul>
-  <div class="cta-row">
-    <a class="btn btn-primary" href="tel:+18189342824">Call Now · (818) 934-2824</a>
-    <a class="btn btn-ghost" style="background:#0B1E3F;color:#fff;border:none" href="#quote">Request Estimate</a>
+  <div class="cta-three">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
   </div>
 </article>
 
@@ -937,9 +1022,19 @@
     <li>Supports modern HVAC, induction, heat pumps</li>
     <li>Required by most home insurers</li>
   </ul>
-  <div class="cta-row">
-    <a class="btn btn-primary" href="tel:+18189342824">Call for Quote · (818) 934-2824</a>
-    <a class="btn btn-ghost" style="background:#0B1E3F;color:#fff;border:none" href="#quote">Free Estimate</a>
+  <div class="cta-three">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
   </div>
 </article>
 
@@ -968,9 +1063,19 @@
     <li>City permit &amp; inspection</li>
     <li>LADWP rebate paperwork support</li>
   </ul>
-  <div class="cta-row">
-    <a class="btn btn-primary" href="tel:+18189342824">Call · (818) 934-2824</a>
-    <a class="btn btn-ghost" style="background:#0B1E3F;color:#fff;border:none" href="#quote">Free Estimate</a>
+  <div class="cta-three">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
   </div>
 </article>
 
@@ -998,9 +1103,19 @@
     <li>Drywall patch-prep (we minimize damage)</li>
     <li>Full permit &amp; inspection</li>
   </ul>
-  <div class="cta-row">
-    <a class="btn btn-primary" href="tel:+18189342824">Call · (818) 934-2824</a>
-    <a class="btn btn-ghost" style="background:#0B1E3F;color:#fff;border:none" href="#quote">Free Estimate</a>
+  <div class="cta-three">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
   </div>
 </article>
 
@@ -1028,9 +1143,19 @@
     <li>Circuit tracing with pro meters</li>
     <li>Written findings &amp; flat-rate fix quote</li>
   </ul>
-  <div class="cta-row">
-    <a class="btn btn-primary" href="tel:+18189342824">Call · (818) 934-2824</a>
-    <a class="btn btn-ghost" style="background:#0B1E3F;color:#fff;border:none" href="#quote">Request Diagnosis</a>
+  <div class="cta-three">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
   </div>
 </article>
 
@@ -1053,9 +1178,19 @@
     <li>Smart lighting (Lutron, Caseta, Hue)</li>
     <li>Dimmers, 3-way, smart switches</li>
   </ul>
-  <div class="cta-row">
-    <a class="btn btn-primary" href="tel:+18189342824">Call · (818) 934-2824</a>
-    <a class="btn btn-ghost" style="background:#0B1E3F;color:#fff;border:none" href="#quote">Free Estimate</a>
+  <div class="cta-three">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
   </div>
 </article>
 
@@ -1085,9 +1220,19 @@
     <li>GCs &amp; architects on TI projects</li>
     <li>Small business owners</li>
   </ul>
-  <div class="cta-row">
-    <a class="btn btn-primary" href="tel:+18189342824">Call · (818) 934-2824</a>
-    <a class="btn btn-ghost" style="background:#0B1E3F;color:#fff;border:none" href="#quote">Request Bid</a>
+  <div class="cta-three">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
   </div>
 </article>
 
@@ -1099,7 +1244,20 @@
   <p class="lede" style="color:var(--muted);margin:0 0 8px">Licensed C10 electrical contractor serving all of LA — from Downtown to the Westside, Mid-City, and the Valley.</p>
   <div class="neighborhoods"><span>Downtown</span><span>Silver Lake</span><span>Echo Park</span><span>Highland Park</span><span>Mid-City</span><span>Westwood</span><span>Hollywood</span><span>K-Town</span></div>
   <p style="color:var(--muted);font-size:13.5px">Same-day service, upfront pricing, permit-pulled work. Call <a href="tel:+18189342824" style="color:var(--blue);font-weight:700">(818) 934-2824</a>.</p>
-  <a class="btn btn-primary" href="tel:+18189342824" style="margin-top:16px;width:100%">Call Now</a>
+  <div class="cta-three" style="margin-top:16px">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
+  </div>
 </article>
 <article class="city-page" id="glendale">
   <a class="back" href="#top" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;margin-bottom:14px">← Back to home</a>
@@ -1107,7 +1265,20 @@
   <h1>Electrician in Glendale, CA</h1>
   <p class="lede" style="color:var(--muted);margin:0 0 8px">Our home base. Office at 121 W Lexington Dr, Suite V100. Fastest response in Glendale — often under 30 minutes.</p>
   <div class="neighborhoods"><span>Downtown Glendale</span><span>Verdugo Woodlands</span><span>Montrose</span><span>Adams Hill</span><span>Glenoaks Canyon</span></div>
-  <a class="btn btn-primary" href="tel:+18189342824" style="margin-top:16px;width:100%">Call Now</a>
+  <div class="cta-three" style="margin-top:16px">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
+  </div>
 </article>
 <article class="city-page" id="burbank">
   <a class="back" href="#top" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;margin-bottom:14px">← Back to home</a>
@@ -1115,7 +1286,20 @@
   <h1>Electrician in Burbank, CA</h1>
   <p class="lede" style="color:var(--muted);margin:0 0 8px">Serving residential &amp; commercial Burbank — Magnolia Park, Media District, Rancho.</p>
   <div class="neighborhoods"><span>Magnolia Park</span><span>Media District</span><span>Rancho</span><span>Toluca Lake</span></div>
-  <a class="btn btn-primary" href="tel:+18189342824" style="margin-top:16px;width:100%">Call Now</a>
+  <div class="cta-three" style="margin-top:16px">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
+  </div>
 </article>
 <article class="city-page" id="pasadena">
   <a class="back" href="#top" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;margin-bottom:14px">← Back to home</a>
@@ -1123,35 +1307,100 @@
   <h1>Electrician in Pasadena, CA</h1>
   <p class="lede" style="color:var(--muted);margin:0 0 8px">Expertise with historic Pasadena homes — Craftsman rewiring, panel upgrades, landmark-compliant installs.</p>
   <div class="neighborhoods"><span>Old Town</span><span>Bungalow Heaven</span><span>South Pasadena</span><span>Altadena</span></div>
-  <a class="btn btn-primary" href="tel:+18189342824" style="margin-top:16px;width:100%">Call Now</a>
+  <div class="cta-three" style="margin-top:16px">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
+  </div>
 </article>
 <article class="city-page" id="noho">
   <a class="back" href="#top" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;margin-bottom:14px">← Back to home</a>
   <span class="eyebrow">North Hollywood</span>
   <h1>Electrician in North Hollywood</h1>
   <p class="lede" style="color:var(--muted);margin:0 0 8px">NoHo Arts District and surrounding neighborhoods — residential, commercial, studio power.</p>
-  <a class="btn btn-primary" href="tel:+18189342824" style="margin-top:16px;width:100%">Call Now</a>
+  <div class="cta-three" style="margin-top:16px">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
+  </div>
 </article>
 <article class="city-page" id="van-nuys">
   <a class="back" href="#top" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;margin-bottom:14px">← Back to home</a>
   <span class="eyebrow">Van Nuys</span>
   <h1>Electrician in Van Nuys, CA</h1>
   <p class="lede" style="color:var(--muted);margin:0 0 8px">Van Nuys &amp; Lake Balboa. Fast dispatch from our Glendale shop.</p>
-  <a class="btn btn-primary" href="tel:+18189342824" style="margin-top:16px;width:100%">Call Now</a>
+  <div class="cta-three" style="margin-top:16px">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
+  </div>
 </article>
 <article class="city-page" id="studio-city">
   <a class="back" href="#top" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;margin-bottom:14px">← Back to home</a>
   <span class="eyebrow">Studio City</span>
   <h1>Electrician in Studio City</h1>
   <p class="lede" style="color:var(--muted);margin:0 0 8px">Hillside homes, modern remodels, and smart-home installs throughout Studio City.</p>
-  <a class="btn btn-primary" href="tel:+18189342824" style="margin-top:16px;width:100%">Call Now</a>
+  <div class="cta-three" style="margin-top:16px">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
+  </div>
 </article>
 <article class="city-page" id="sherman-oaks">
   <a class="back" href="#top" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;margin-bottom:14px">← Back to home</a>
   <span class="eyebrow">Sherman Oaks</span>
   <h1>Electrician in Sherman Oaks, CA</h1>
   <p class="lede" style="color:var(--muted);margin:0 0 8px">Panel replacements, EV chargers, and full rewires throughout Sherman Oaks.</p>
-  <a class="btn btn-primary" href="tel:+18189342824" style="margin-top:16px;width:100%">Call Now</a>
+  <div class="cta-three" style="margin-top:16px">
+    <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Call Now
+    </a>
+    <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Text Sam
+    </a>
+    <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Free Estimate
+    </button>
+  </div>
 </article>
 
   <!-- FOOTER -->
@@ -1207,7 +1456,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
       Call Now
     </a>
-    <a class="quote" href="#quote">
+    <a class="quote" href="#" onclick="openQuoteModal(event); return false;" aria-label="Request a free estimate">
       Free Estimate
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
     </a>
@@ -1287,7 +1536,132 @@
 
 
 
+<!-- ============ QUOTE MODAL ============ -->
+<div class="modal-overlay" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle" aria-hidden="true">
+  <div class="modal" role="document">
+    <button type="button" class="modal-close" onclick="closeQuoteModal()" aria-label="Close">&times;</button>
+    <div class="form-state">
+      <h3 id="quoteModalTitle">Get a free estimate</h3>
+      <p class="modal-sub">We'll call or text within 15 min during business hours. No spam, ever.</p>
+      <form id="quoteForm" onsubmit="return submitQuote(event)">
+        <input type="hidden" name="access_key" value="11ac3944-7c91-4632-9b00-2c6071c85345">
+        <input type="hidden" name="subject" value="New lead from goservicesam.com">
+        <input type="hidden" name="from_name" value="Service Sam Electric Website">
+        <input type="hidden" name="redirect" value="false">
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="field"><label>Your name</label><input type="text" name="name" placeholder="Alex Garcia" required=""></div>
+        <div class="field"><label>Phone</label><input type="tel" name="phone" placeholder="(818) 555-0000" required=""></div>
+        <div class="field">
+          <label>Service needed</label>
+          <select name="service" required="">
+            <option value="">Select a service…</option>
+            <option>Emergency repair</option>
+            <option>Panel upgrade</option>
+            <option>EV charger install</option>
+            <option>Troubleshooting</option>
+            <option>Lighting</option>
+            <option>Rewiring</option>
+            <option>Commercial</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <button class="btn-submit" type="submit">Get My Free Estimate →</button>
+        <div class="fallback-call">or call directly: <a href="tel:+18189342824">(818) 934-2824</a></div>
+        <div class="agree" style="margin-top:10px;font-size:11px;color:var(--muted);text-align:center;line-height:1.4">By submitting, you agree to be contacted by Service Sam Electric at the number provided.</div>
+      </form>
+    </div>
+    <div class="success-state" aria-live="polite">
+      <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+      <h3>Got it — we'll call you back within 15 min</h3>
+      <p>Keep an eye on your phone.</p>
+    </div>
+  </div>
+</div>
+
 <script>
+  // ====== Quote modal (open/close/focus trap/escape) ======
+  (function () {
+    const overlay = document.getElementById('quoteModal');
+    const modal = overlay.querySelector('.modal');
+    let lastFocused = null;
+    let autoCloseTimer = null;
+
+    function getFocusable() {
+      return modal.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+    }
+
+    window.openQuoteModal = function (e) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+      lastFocused = document.activeElement;
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      // Reset to form state in case it was left in success state
+      modal.classList.remove('is-success');
+      // Trigger transition on next frame
+      requestAnimationFrame(() => overlay.classList.add('visible'));
+      // Move focus to first visible field
+      const firstField = modal.querySelector('input[name="name"]');
+      if (firstField) setTimeout(() => firstField.focus(), 50);
+    };
+
+    window.closeQuoteModal = function () {
+      overlay.classList.remove('visible');
+      overlay.setAttribute('aria-hidden', 'true');
+      setTimeout(() => {
+        overlay.classList.remove('open');
+        document.body.classList.remove('modal-open');
+        modal.classList.remove('is-success');
+        if (lastFocused && typeof lastFocused.focus === 'function') {
+          lastFocused.focus();
+        }
+      }, 180);
+      if (autoCloseTimer) {
+        clearTimeout(autoCloseTimer);
+        autoCloseTimer = null;
+      }
+    };
+
+    // Click outside modal closes it
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeQuoteModal();
+    });
+
+    // Escape closes it; Tab traps focus inside
+    document.addEventListener('keydown', function (e) {
+      if (!overlay.classList.contains('open')) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeQuoteModal();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const focusable = Array.from(getFocusable()).filter(
+          el => el.offsetParent !== null
+        );
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    window._showQuoteSuccess = function () {
+      modal.classList.add('is-success');
+      autoCloseTimer = setTimeout(() => {
+        closeQuoteModal();
+      }, 2000);
+    };
+  })();
+
   async function submitQuote(e) {
     e.preventDefault();
     const form = e.target;
@@ -1304,15 +1678,12 @@
       });
       const data = await res.json();
       if (data.success) {
-        btn.textContent = '✓ Got it — we’ll call you back';
-        btn.style.background = '#29d57a';
         form.reset();
-        // reset button after 4 seconds so users can submit again if needed
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.style.background = '';
-          btn.disabled = false;
-        }, 6000);
+        btn.textContent = originalText;
+        btn.disabled = false;
+        if (typeof window._showQuoteSuccess === 'function') {
+          window._showQuoteSuccess();
+        }
       } else {
         throw new Error(data.message || 'Submission failed');
       }
