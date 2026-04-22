@@ -156,13 +156,11 @@
     flex:1;min-width:0;
   }
   .trust-badge .tb-logo{
-    width:32px;height:32px;flex:0 0 32px;border-radius:50%;
+    width:34px;height:34px;flex:0 0 34px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:15px;line-height:1;
-    background:#fff;border:1px solid var(--line);color:var(--navy-ink);
+    background:#fff;border:1px solid var(--line);overflow:hidden;
   }
-  .trust-badge .tb-logo.angi{background:var(--navy);color:var(--yellow);border-color:var(--navy)}
-  .trust-badge .tb-logo.yelp{background:#fff;color:#d32323;border-color:#f0d4d4}
+  .trust-badge .tb-logo svg{display:block}
   .trust-badge .tb-text b{display:block;font-size:13px;color:var(--navy-ink);line-height:1.15}
   .trust-badge .tb-text small{display:block;color:var(--muted);font-size:11px;letter-spacing:.04em;margin-top:2px;text-transform:uppercase;font-weight:600}
   @media (min-width:560px){
@@ -300,53 +298,66 @@
   .step p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
   .step .t{font-size:10.5px;font-weight:700;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;margin-top:6px;display:inline-block}
 
-  .reviews-head{
-    display:flex;align-items:center;gap:10px;margin-bottom:14px;
-    background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;
-  }
-  .reviews-head .big{font-family:'Archivo Black';font-size:26px;color:var(--navy-ink);line-height:1}
-  .reviews-head small{color:var(--muted);font-size:11.5px;display:block;margin-top:2px}
-  .reviews-rail{
-    display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
-    margin:0 -20px;padding:0 20px 6px;
-    scrollbar-width:none;
+  .reviews-grid{
+    display:grid;grid-template-columns:1fr;gap:16px;
     align-items:stretch;
   }
-  .reviews-rail::-webkit-scrollbar{display:none}
+  @media (min-width:768px){
+    .reviews-grid{grid-template-columns:repeat(3,1fr);gap:20px}
+  }
   .review{
-    flex:0 0 86%;scroll-snap-align:start;
-    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
-    padding:16px;
+    background:#fff;border:1px solid #eef0f6;border-radius:16px;
+    padding:24px;
     display:flex;flex-direction:column;
+    box-shadow:0 2px 12px -4px rgba(11,30,63,.06);
+    transition:transform .18s ease, box-shadow .18s ease;
   }
-  .review .stars{margin-bottom:8px}
-  .review q{
-    display:block;font-size:14px;line-height:1.55;color:var(--navy-ink);
-    quotes:none; overflow-wrap:break-word; word-break:break-word; hyphens:auto;
-    flex:1;
+  @media (hover:hover) and (min-width:768px){
+    .review:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 24px -8px rgba(11,30,63,.12);
+    }
   }
-  .review q::before,.review q::after{content:""}
-  .review .who{display:flex;align-items:center;gap:10px;margin-top:14px}
-  .review .av{
-    width:34px;height:34px;border-radius:50%;
-    background:linear-gradient(135deg,#1E5FD4,#0B1E3F);color:#fff;
-    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+  .review .stars{
+    font-size:18px;letter-spacing:1px;color:#FFC422;
+    line-height:1;margin-bottom:12px;
   }
-  .review .who b{font-size:13px;display:block;color:var(--navy-ink)}
-  .review .who small{color:var(--muted);font-size:11px}
+  .review .review-text{
+    margin:0;font-size:15px;line-height:1.55;color:#1a2740;
+    display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;
+    overflow:hidden;
+  }
   .review .read-more{
-    display:inline-flex;align-items:center;gap:6px;margin-top:12px;
-    font-size:12px;color:var(--blue);text-decoration:none;font-weight:600;
+    display:inline-block;margin-top:12px;
+    font-size:14px;color:#1E5FD4;font-weight:600;text-decoration:none;
   }
   .review .read-more:hover{text-decoration:underline}
-  .review .read-more svg{width:12px;height:12px}
-  @media (min-width:768px){
-    .reviews-rail{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
-      overflow:visible;margin:0;padding:0;
-    }
-    .review{flex:none;height:100%}
+  .review .review-divider{
+    border:0;border-top:1px solid #eef0f6;margin:16px 0;
   }
+  .review .who{display:flex;align-items:center;gap:12px}
+  .review .av{
+    width:36px;height:36px;flex:0 0 36px;border-radius:50%;
+    background:#0B1E3F;color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:13px;letter-spacing:.02em;
+  }
+  .review .who .name{
+    font-weight:700;color:#0b1220;font-size:14px;line-height:1.2;
+  }
+  .review .who .via{
+    display:inline-flex;align-items:center;gap:5px;
+    color:#5b6477;font-size:12px;margin-top:3px;
+  }
+  .review .who .via svg{display:block;flex:0 0 12px}
+  .reviews-footer{
+    display:flex;justify-content:center;margin-top:24px;
+  }
+  .reviews-footer a{
+    font-size:16px;color:#1E5FD4;font-weight:600;text-decoration:none;
+  }
+  .reviews-footer a:hover{text-decoration:underline}
+  .reviews-section{padding-bottom:100px}
 
   .ba{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-top:16px}
   .ba-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -417,15 +428,76 @@
   }
   .agree{font-size:11px;color:#7f8eae;text-align:center;margin-top:10px;line-height:1.4}
 
-  footer{background:#06112a;color:#9aa7c5;padding:28px 20px 28px;font-size:13px}
-  footer .foot-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-  footer .foot-brand img{width:42px;height:42px;border-radius:50%}
-  footer .foot-brand b{color:#fff;font-size:15px;display:block}
-  footer .foot-brand small{color:#6f7ea1;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
-  footer h4{color:#fff;font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin:18px 0 8px}
-  footer a{color:#c9d3e8;text-decoration:none;display:block;padding:4px 0;font-size:13px}
-  footer .lic{border-top:1px solid rgba(255,255,255,.08);margin-top:20px;padding-top:14px;font-size:11.5px;line-height:1.5}
-  footer .lic b{color:#fff}
+  /* ===== SITE FOOTER ===== */
+  body{padding-bottom:80px}
+  .site-footer{background:#0B1E3F;color:#cbd5e1;font-size:13px;line-height:1.6}
+  .footer-cta{background:#0F2551;color:#fff;padding:40px 24px;text-align:center}
+  .footer-cta-inner{max-width:720px;margin:0 auto}
+  .footer-cta h2{
+    font-family:'Archivo Black';font-size:22px;color:#fff;
+    margin:0 0 8px;line-height:1.15;letter-spacing:-.01em;font-weight:900;
+  }
+  .footer-cta p{color:#a7b5cf;font-size:16px;margin:0 0 24px;line-height:1.5}
+  .footer-cta .cta-three{max-width:540px;margin:0 auto}
+  @media (min-width:768px){.footer-cta h2{font-size:28px}}
+
+  .footer-main{padding:56px 24px 24px;max-width:1100px;margin:0 auto}
+  .footer-grid{display:grid;grid-template-columns:1fr;gap:40px 48px}
+  @media (min-width:640px){.footer-grid{grid-template-columns:1fr 1fr}}
+  @media (min-width:1024px){.footer-grid{grid-template-columns:1.4fr 1fr 1fr 1.2fr}}
+
+  .footer-col h4{
+    color:#fff;font-weight:800;font-size:14px;
+    letter-spacing:.1em;text-transform:uppercase;margin:0 0 16px;
+  }
+  .footer-col ul{list-style:none;padding:0;margin:0}
+  .footer-col ul a{
+    color:#cbd5e1;font-size:14px;line-height:2;
+    text-decoration:none;display:block;transition:color .15s ease;
+  }
+  .footer-col ul a:hover{color:#FFC422}
+
+  .footer-brand .brand-logo{
+    width:52px;height:52px;border-radius:50%;background:#FFC422;
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  }
+  .footer-brand .brand-logo svg{width:28px;height:28px}
+  .footer-brand .brand-name{color:#fff;font-weight:900;font-size:20px;line-height:1.2;margin:0 0 4px}
+  .footer-brand .brand-sub{color:#8fa3c3;font-size:13px;letter-spacing:.04em;margin:0}
+  .footer-brand .brand-lic{color:#FFC422;font-size:12px;font-weight:700;margin:8px 0 0;letter-spacing:.02em}
+  .footer-social{display:flex;gap:12px;margin-top:18px}
+  .footer-social a{
+    width:36px;height:36px;border-radius:8px;background:#fff;
+    display:inline-flex;align-items:center;justify-content:center;padding:0;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .footer-social a:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+  .footer-social svg{display:block;width:20px;height:20px}
+
+  .footer-contact ul{list-style:none;padding:0;margin:0}
+  .footer-contact li{
+    display:flex;align-items:flex-start;gap:10px;
+    margin-bottom:12px;color:#cbd5e1;font-size:14px;line-height:1.5;
+  }
+  .footer-contact .ico{
+    flex:0 0 18px;width:18px;height:18px;color:#FFC422;margin-top:2px;
+  }
+  .footer-contact a{
+    color:#cbd5e1;text-decoration:none;line-height:1.5;
+    transition:color .15s ease;
+  }
+  .footer-contact a:hover{color:#FFC422}
+  .footer-contact .emergency{color:#FFC422;display:block;font-weight:600;font-size:13px;margin-top:2px}
+
+  .footer-bottom{
+    max-width:1100px;margin:48px auto 0;padding:24px;
+    border-top:1px solid rgba(255,255,255,.1);
+    display:flex;flex-direction:column;gap:8px;
+    font-size:12px;color:#8fa3c3;
+  }
+  @media (min-width:640px){
+    .footer-bottom{flex-direction:row;justify-content:space-between;gap:16px}
+  }
 
   .sticky-cta{
     position:fixed;bottom:0;left:0;right:0;z-index:50;
@@ -737,15 +809,25 @@
   <!-- Trust strip -->
   <div class="trust-strip" aria-label="Trusted across top review platforms">
     <div class="trust-badge">
-      <div class="tb-logo" aria-hidden="true">G</div>
+      <div class="tb-logo" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+      </div>
       <div class="tb-text">
         <b>5 Stars on Google</b>
         <small>Google Reviews</small>
       </div>
     </div>
     <div class="trust-badge">
-      <div class="tb-logo angi" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <div class="tb-logo" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <circle cx="12" cy="12" r="12" fill="#FF6153"/>
+          <path fill="#fff" d="M9.2 17h-2l3.4-10h2.8l3.4 10h-2l-.8-2.4h-4zm1.4-4.2h2.8L12 8.4z"/>
+        </svg>
       </div>
       <div class="tb-text">
         <b>Trusted &amp; Verified by Angi</b>
@@ -753,7 +835,12 @@
       </div>
     </div>
     <div class="trust-badge">
-      <div class="tb-logo yelp" aria-hidden="true">Y</div>
+      <div class="tb-logo" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <circle cx="12" cy="12" r="12" fill="#D32323"/>
+          <path fill="#fff" d="M13.5 5.5c-.3-.1-.6.1-.7.4l-1.4 4.6c-.1.4.2.8.6.8l3.1.1c.4 0 .7-.3.6-.7-.2-2.3-.9-4.3-2.2-5.2zm-3 6.1c-.2-.3-.6-.4-.9-.2L6.8 13c-.3.2-.4.6-.2.9.8 1.4 1.9 2.6 3.3 3.4.3.2.7.1.9-.2l1.6-2.7c.2-.3.1-.7-.2-.9zm3.6 1c-.3-.2-.7-.1-.9.2l-1.6 2.7c-.2.3-.1.7.2.9 1.2.5 2.5.8 3.8.8.4 0 .7-.3.7-.7l-.1-3.1c0-.3-.3-.6-.7-.6zm3.7-2.8c-.1-.3-.4-.5-.8-.4l-3 .8c-.3.1-.5.5-.4.8.6 1.5 1.7 2.8 3.1 3.6.3.2.7 0 .8-.3.5-1.4.6-3 .3-4.5z"/>
+        </svg>
+      </div>
       <div class="tb-text">
         <b>Loved on Yelp</b>
         <small>Yelp</small>
@@ -882,54 +969,67 @@
   </section>
 
   <!-- REVIEWS -->
-  <section style="padding-bottom:16px">
+  <section class="reviews-section">
     <span class="eyebrow">Social Proof</span>
     <h2 class="sec">What our customers say.</h2>
-  </section>
 
-  <div class="reviews-rail">
-    <div class="review">
-      <div class="stars" aria-label="5 star rating">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-      </div>
-      <q>Sam is THE BEST!!!! I normally do not have or take the time to write reviews but Sam is truly WELL DESERVING of this 5 star review. If there was an option to give him 10 stars or more, I would definitely give him the maximum stars. I've dealt with so many people from different companies and I've never felt as comfortable and as safe with them as with Sam. There are so many electricians/contractors out there that are just after your money yet they still do a poor job but Sam is very different. He is super honest, reliable, kind, trustworthy, professional, and friendly. He will tell you with all honesty if what you plan to get done in your house is worth paying for or just a waste. Plus he is knowledgeable with what he does. My family and I are not only thankful for the work his done in our house, but we are also extremely grateful for having met Sam as a person. Sam, please know that I will be your customer for life!</q>
-      <div class="who"><div class="av">AC</div><div><b>Amy C.</b><small>via Google</small></div></div>
-      <a class="read-more" href="https://www.google.com/search?q=Service+Sam+Electric" target="_blank" rel="noopener noreferrer">
-        Read full review on Google
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><polyline points="8 7 17 7 17 16"></polyline></svg>
-      </a>
+    <div class="reviews-grid">
+      <article class="review">
+        <div class="stars" aria-label="5 star rating">★★★★★</div>
+        <p class="review-text">Sam is THE BEST!!!! I normally do not have or take the time to write reviews but Sam is truly WELL DESERVING of this 5 star review. If there was an option to give him 10 stars or more, I would definitely give him the maximum stars. I've dealt with so many people from different companies and I've never felt as comfortable and as safe with them as with Sam. There are so many electricians/contractors out there that are just after your money yet they still do a poor job but Sam is very different. He is super honest, reliable, kind, trustworthy, professional, and friendly. He will tell you with all honesty if what you plan to get done in your house is worth paying for or just a waste. Plus he is knowledgeable with what he does. My family and I are not only thankful for the work his done in our house, but we are also extremely grateful for having met Sam as a person. Sam, please know that I will be your customer for life!</p>
+        <a class="read-more" href="https://share.google/7NwRjGQXGjUnWlkaW" target="_blank" rel="noopener">Read full review →</a>
+        <hr class="review-divider">
+        <div class="who">
+          <div class="av" aria-hidden="true">AC</div>
+          <div>
+            <div class="name">Amy C.</div>
+            <div class="via">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              via Google
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="review">
+        <div class="stars" aria-label="5 star rating">★★★★★</div>
+        <p class="review-text">Sam is exceptional. His professionalism and expertise are unmatched, and he carries out his work with a genuine smile. What sets him apart is his honesty and the time he takes to explain each step of the process — a rare and much-appreciated quality. He and his crew are incredibly meticulous; you'd never know they were there once the job is done. Sam turned my vision into a stunning reality, and I'm beyond grateful. I've already recommended him to several friends, and if you're looking for a reliable, skilled, and trustworthy electrician, Sam is the one to call.</p>
+        <a class="read-more" href="https://share.google/7NwRjGQXGjUnWlkaW" target="_blank" rel="noopener">Read full review →</a>
+        <hr class="review-divider">
+        <div class="who">
+          <div class="av" aria-hidden="true">SA</div>
+          <div>
+            <div class="name">Sherry A.</div>
+            <div class="via">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              via Google
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="review">
+        <div class="stars" aria-label="5 star rating">★★★★★</div>
+        <p class="review-text">We have been trying to get lighting done at our home for 2 months, received estimate after estimate. Sam showed up and not only did he give us a price within our budget, but also provided us with peace of mind. Very professional and knowledgeable. I would highly recommend his service. We are extremely happy.</p>
+        <a class="read-more" href="https://share.google/7NwRjGQXGjUnWlkaW" target="_blank" rel="noopener">Read full review →</a>
+        <hr class="review-divider">
+        <div class="who">
+          <div class="av" aria-hidden="true">EY</div>
+          <div>
+            <div class="name">Erik Y.</div>
+            <div class="via">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              via Google
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
-    <div class="review">
-      <div class="stars" aria-label="5 star rating">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-      </div>
-      <q>Sam is exceptional. His professionalism and expertise are unmatched, and he carries out his work with a genuine smile. What sets him apart is his honesty and the time he takes to explain each step of the process — a rare and much-appreciated quality. He and his crew are incredibly meticulous; you'd never know they were there once the job is done. Sam turned my vision into a stunning reality, and I'm beyond grateful. I've already recommended him to several friends, and if you're looking for a reliable, skilled, and trustworthy electrician, Sam is the one to call.</q>
-      <div class="who"><div class="av">SA</div><div><b>Sherry A.</b><small>via Google</small></div></div>
-      <a class="read-more" href="https://www.google.com/search?q=Service+Sam+Electric" target="_blank" rel="noopener noreferrer">
-        Read full review on Google
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><polyline points="8 7 17 7 17 16"></polyline></svg>
-      </a>
+
+    <div class="reviews-footer">
+      <a href="https://share.google/7NwRjGQXGjUnWlkaW" target="_blank" rel="noopener">See all reviews on Google →</a>
     </div>
-    <div class="review">
-      <div class="stars" aria-label="5 star rating">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-      </div>
-      <q>We have been trying to get lighting done at our home for 2 months, received estimate after estimate. Sam showed up and not only did he give us a price within our budget, but also provided us with peace of mind. Very professional and knowledgeable. I would highly recommend his service. We are extremely happy.</q>
-      <div class="who"><div class="av">EY</div><div><b>Erik Y.</b><small>via Google</small></div></div>
-    </div>
-  </div>
+  </section>
 
   <!-- CTA SECTION -->
   <section id="quote">
@@ -1403,51 +1503,6 @@
   </div>
 </article>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="foot-brand">
-      <img src="data:image/png;base64,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" alt="">
-      <div>
-        <b>Service Sam Electric</b>
-        <small>C10 · Glendale, CA</small>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
-      <a class="btn btn-primary" href="tel:+18189342824" style="padding:12px 14px;font-size:14px">Call (818) 934-2824</a>
-    </div>
-
-    <h4>Services</h4>
-    <a href="#panel">Panel Upgrades Los Angeles</a>
-    <a href="#ev">EV Charger Installation LA</a>
-    <a href="#rewire">Whole-Home Rewiring</a>
-    <a href="#troubleshoot">Electrical Troubleshooting</a>
-    <a href="#lighting">Lighting Installation</a>
-    <a href="#commercial">Commercial Electrical</a>
-    <a href="#emergency">Emergency Electrician LA</a>
-
-    <h4>Service Areas</h4>
-    <a href="#la">Electrician Los Angeles</a>
-    <a href="#glendale">Electrician Glendale CA</a>
-    <a href="#burbank">Electrician Burbank CA</a>
-    <a href="#pasadena">Electrician Pasadena CA</a>
-    <a href="#noho">Electrician North Hollywood</a>
-    <a href="#van-nuys">Electrician Van Nuys</a>
-    <a href="#studio-city">Electrician Studio City</a>
-    <a href="#sherman-oaks">Electrician Sherman Oaks</a>
-
-    <h4>Contact</h4>
-    <a href="tel:+18189342824">📞 (818) 934-2824</a>
-    <a href="mailto:Sam@goservicesam.com">✉ Sam@goservicesam.com</a>
-    <a>👤 Sam Davoodian, Owner</a>
-    <a>📍 121 W Lexington Dr, Suite V100<br>&nbsp;&nbsp;&nbsp;Glendale, CA 91203</a>
-    <a>🕒 Mon–Sat · 7am–9pm · 24/7 Emergency</a>
-
-    <div class="lic">
-      <b>Service Sam Electric, Inc.</b><br>
-      CA C10 License #1125961 · Bonded &amp; Insured<br>
-      © 2026 GoServiceSam.com · All rights reserved.
-    </div>
-  </footer>
 
   <!-- Sticky bottom CTA -->
   <div class="sticky-cta">
@@ -1463,6 +1518,115 @@
   </div>
 
 </div>
+
+<!-- ============ SITE FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <!-- Top CTA strip -->
+  <div class="footer-cta">
+    <div class="footer-cta-inner">
+      <h2>Need an electrician you can trust?</h2>
+      <p>Licensed, insured, and highly rated across LA County.</p>
+      <div class="cta-three on-dark">
+        <a class="btn btn-primary" href="tel:+18189342824" aria-label="Call Service Sam Electric">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          Call Now
+        </a>
+        <a class="btn btn-outline" href="sms:+18189342824?&amp;body=Hi%20Sam%2C%20I%20got%20your%20info%20from%20goservicesam.com%20and%20need%20help%20with%3A%20" aria-label="Text Sam">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          Text Sam
+        </a>
+        <button type="button" class="btn btn-outline" onclick="openQuoteModal(event)" aria-label="Request a free estimate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Free Estimate
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main footer grid -->
+  <div class="footer-main">
+    <div class="footer-grid">
+      <!-- Brand -->
+      <div class="footer-col footer-brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="#0B1E3F" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        </div>
+        <p class="brand-name">Service Sam Electric</p>
+        <p class="brand-sub">Licensed C10 Electrical Contractor</p>
+        <p class="brand-lic">CSLB C10 #1125961</p>
+        <div class="footer-social" aria-label="Review platforms">
+          <a href="https://share.google/7NwRjGQXGjUnWlkaW" target="_blank" rel="noopener" aria-label="Google reviews">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          </a>
+          <a href="https://www.homeadvisor.com/rated.SamsElectricalService.32858483.html" target="_blank" rel="noopener" aria-label="Angi profile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#FF6153"/><path fill="#fff" d="M9.2 17h-2l3.4-10h2.8l3.4 10h-2l-.8-2.4h-4zm1.4-4.2h2.8L12 8.4z"/></svg>
+          </a>
+          <a href="https://www.yelp.com/biz/service-sam-electric-glendale" target="_blank" rel="noopener" aria-label="Yelp profile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#D32323"/><path fill="#fff" d="M13.5 5.5c-.3-.1-.6.1-.7.4l-1.4 4.6c-.1.4.2.8.6.8l3.1.1c.4 0 .7-.3.6-.7-.2-2.3-.9-4.3-2.2-5.2zm-3 6.1c-.2-.3-.6-.4-.9-.2L6.8 13c-.3.2-.4.6-.2.9.8 1.4 1.9 2.6 3.3 3.4.3.2.7.1.9-.2l1.6-2.7c.2-.3.1-.7-.2-.9zm3.6 1c-.3-.2-.7-.1-.9.2l-1.6 2.7c-.2.3-.1.7.2.9 1.2.5 2.5.8 3.8.8.4 0 .7-.3.7-.7l-.1-3.1c0-.3-.3-.6-.7-.6zm3.7-2.8c-.1-.3-.4-.5-.8-.4l-3 .8c-.3.1-.5.5-.4.8.6 1.5 1.7 2.8 3.1 3.6.3.2.7 0 .8-.3.5-1.4.6-3 .3-4.5z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#emergency">Emergency Electrician</a></li>
+          <li><a href="#panel">Panel Upgrades</a></li>
+          <li><a href="#ev">EV Charger Installation</a></li>
+          <li><a href="#rewire">Whole-Home Rewiring</a></li>
+          <li><a href="#troubleshoot">Troubleshooting</a></li>
+          <li><a href="#lighting">Lighting Installation</a></li>
+          <li><a href="#commercial">Commercial Electrical</a></li>
+        </ul>
+      </div>
+
+      <!-- Service Areas -->
+      <div class="footer-col">
+        <h4>Service Areas</h4>
+        <ul>
+          <li><a href="#la">Los Angeles</a></li>
+          <li><a href="#glendale">Glendale</a></li>
+          <li><a href="#burbank">Burbank</a></li>
+          <li><a href="#pasadena">Pasadena</a></li>
+          <li><a href="#noho">North Hollywood</a></li>
+          <li><a href="#van-nuys">Van Nuys</a></li>
+          <li><a href="#studio-city">Studio City</a></li>
+          <li><a href="#sherman-oaks">Sherman Oaks</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col footer-contact">
+        <h4>Contact</h4>
+        <ul>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <a href="tel:+18189342824">(818) 934-2824</a>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <a href="mailto:Sam@goservicesam.com">Sam@goservicesam.com</a>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>121 W Lexington Dr, Suite V100<br>Glendale, CA 91203</span>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Mon–Sat · 7am–9pm<span class="emergency">24/7 Emergency</span></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; <span id="yr"></span> Service Sam Electric, Inc. &middot; All rights reserved.</div>
+      <div>CA C10 License #1125961 &middot; Bonded &amp; Insured</div>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
 
 <!-- Local Business Schema (SEO) -->
 <script type="application/ld+json">
@@ -1503,36 +1667,7 @@
 
 
 
-<!-- ============ SITE FOOTER ============ -->
-<footer class="site-footer" style="max-width:430px;margin:0 auto;padding:32px 20px 40px;background:var(--navy);color:#cbd5e1;font-size:13px;line-height:1.6">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-    <div style="width:36px;height:36px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center">
-      <svg viewBox="0 0 24 24" fill="var(--navy)" width="18" height="18"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-    </div>
-    <div>
-      <div style="color:#fff;font-weight:800;letter-spacing:.02em">Service Sam Electric</div>
-      <div style="font-size:11px;color:#8fa3c3;letter-spacing:.14em;text-transform:uppercase">C10 · LIC #1125961</div>
-    </div>
-  </div>
-  <p style="margin:0 0 12px"><strong style="color:#fff">Address</strong><br>121 W Lexington Dr, Suite V100<br>Glendale, CA 91203</p>
-  <p style="margin:0 0 12px"><strong style="color:#fff">Phone</strong><br><a href="tel:+18189342824" style="color:#FFC422;text-decoration:none">(818) 934-2824</a></p>
-  <p style="margin:0 0 12px"><strong style="color:#fff">Email</strong><br><a href="mailto:Sam@goservicesam.com" style="color:#FFC422;text-decoration:none">Sam@goservicesam.com</a></p>
-  <p style="margin:0 0 12px"><strong style="color:#fff">Hours</strong><br>Mon–Sat: 7 AM – 9 PM<br>Emergency calls: 24/7</p>
-  <p style="margin:0 0 16px"><strong style="color:#fff">Service Area</strong><br>Los Angeles · Glendale · Burbank · Pasadena · North Hollywood · Van Nuys · Studio City · Sherman Oaks · all of LA County</p>
-  <hr style="border:none;border-top:1px solid rgba(255,255,255,.1);margin:20px 0">
-  <p style="margin:0;font-size:11px;color:#8fa3c3">California Licensed Electrical Contractor · CSLB C10 License #1125961 · Bonded &amp; Insured<br><br>&copy; <span id="yr"></span> Service Sam Electric. All rights reserved.</p>
-  <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
-</footer>
 
-<style>
-  @media (min-width: 768px) {
-    .site-footer { max-width: 720px !important; padding: 40px 48px 48px !important; }
-  }
-  @media (min-width: 1100px) {
-    .site-footer { max-width: 960px !important; }
-    .site-footer > p { display: inline-block; width: 48%; vertical-align: top; }
-  }
-</style>
 
 
 
