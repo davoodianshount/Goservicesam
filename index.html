@@ -144,18 +144,32 @@
   .trust-strip{
     margin:-14px 16px 0;position:relative;z-index:5;
     background:#fff;border-radius:14px;
-    padding:14px 16px; display:flex;align-items:center;gap:12px;
+    padding:12px 10px;
+    display:flex;flex-direction:column;gap:8px;
     box-shadow:var(--shadow); border:1px solid var(--line);
   }
   .stars{display:flex;gap:2px}
   .stars svg{width:15px;height:15px;fill:#FFB400}
-  .trust-strip .g-logo{
-    width:28px;height:28px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    background:#fff;border:1px solid var(--line);font-weight:800;font-size:15px;
+  .trust-badge{
+    display:flex;align-items:center;gap:10px;
+    padding:8px 10px;border-radius:10px;
+    flex:1;min-width:0;
   }
-  .trust-strip b{font-size:14px}
-  .trust-strip small{display:block;color:var(--muted);font-size:11.5px;margin-top:1px}
+  .trust-badge .tb-logo{
+    width:32px;height:32px;flex:0 0 32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:15px;line-height:1;
+    background:#fff;border:1px solid var(--line);color:var(--navy-ink);
+  }
+  .trust-badge .tb-logo.angi{background:var(--navy);color:var(--yellow);border-color:var(--navy)}
+  .trust-badge .tb-logo.yelp{background:#fff;color:#d32323;border-color:#f0d4d4}
+  .trust-badge .tb-text b{display:block;font-size:13px;color:var(--navy-ink);line-height:1.15}
+  .trust-badge .tb-text small{display:block;color:var(--muted);font-size:11px;letter-spacing:.04em;margin-top:2px;text-transform:uppercase;font-weight:600}
+  @media (min-width:560px){
+    .trust-strip{flex-direction:row;align-items:stretch;gap:6px;padding:10px}
+    .trust-badge{border-right:1px solid var(--line)}
+    .trust-badge:last-child{border-right:0}
+  }
 
   section{padding:36px 20px}
   .eyebrow{
@@ -173,17 +187,31 @@
   }
   .sec-lede{color:var(--muted);font-size:14.5px;margin:0 0 20px;max-width:36ch}
 
-  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .why{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px}
-  .why .ic{
-    width:34px;height:34px;border-radius:9px;
-    background:var(--navy);color:var(--yellow);
-    display:flex;align-items:center;justify-content:center;
-    margin-bottom:10px;
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .why{
+    background:#fff;
+    border:1px solid #eef0f6;
+    border-radius:var(--radius);
+    padding:20px 18px;
+    transition:box-shadow .2s ease, transform .2s ease, border-color .2s ease;
   }
-  .why .ic svg{width:18px;height:18px}
-  .why b{display:block;font-size:13.5px;color:var(--navy-ink);margin-bottom:3px}
-  .why p{margin:0;font-size:12px;color:var(--muted);line-height:1.4}
+  .why .ic{
+    width:48px;height:48px;border-radius:50%;
+    background:rgba(255,196,34,.15);
+    color:var(--navy);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:14px;
+  }
+  .why .ic svg{width:24px;height:24px}
+  .why b{display:block;font-size:14.5px;color:var(--navy-ink);margin-bottom:4px;letter-spacing:-.005em}
+  .why p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5}
+  @media (hover:hover) and (min-width:768px){
+    .why:hover{
+      box-shadow:0 4px 20px -8px rgba(11,30,63,.08);
+      border-color:#e1e5ef;
+      transform:translateY(-1px);
+    }
+  }
 
   .services{display:flex;flex-direction:column;gap:10px}
   .svc{
@@ -282,17 +310,23 @@
     display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
     margin:0 -20px;padding:0 20px 6px;
     scrollbar-width:none;
+    align-items:stretch;
   }
   .reviews-rail::-webkit-scrollbar{display:none}
   .review{
-    flex:0 0 78%;scroll-snap-align:start;
+    flex:0 0 86%;scroll-snap-align:start;
     background:#fff;border:1px solid var(--line);border-radius:var(--radius);
     padding:16px;
+    display:flex;flex-direction:column;
   }
   .review .stars{margin-bottom:8px}
-  .review q{display:block;font-size:14px;line-height:1.5;color:var(--navy-ink);quotes:none}
+  .review q{
+    display:block;font-size:14px;line-height:1.55;color:var(--navy-ink);
+    quotes:none; overflow-wrap:break-word; word-break:break-word; hyphens:auto;
+    flex:1;
+  }
   .review q::before,.review q::after{content:""}
-  .review .who{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .review .who{display:flex;align-items:center;gap:10px;margin-top:14px}
   .review .av{
     width:34px;height:34px;border-radius:50%;
     background:linear-gradient(135deg,#1E5FD4,#0B1E3F);color:#fff;
@@ -300,6 +334,19 @@
   }
   .review .who b{font-size:13px;display:block;color:var(--navy-ink)}
   .review .who small{color:var(--muted);font-size:11px}
+  .review .read-more{
+    display:inline-flex;align-items:center;gap:6px;margin-top:12px;
+    font-size:12px;color:var(--blue);text-decoration:none;font-weight:600;
+  }
+  .review .read-more:hover{text-decoration:underline}
+  .review .read-more svg{width:12px;height:12px}
+  @media (min-width:768px){
+    .reviews-rail{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+      overflow:visible;margin:0;padding:0;
+    }
+    .review{flex:none;height:100%}
+  }
 
   .ba{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-top:16px}
   .ba-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -515,13 +562,14 @@
     .cta-stack { flex-direction: row !important; }
     .cta-stack .btn { flex: 1; }
     section:not(.hero) { padding-left: 48px !important; padding-right: 48px !important; }
-    .why-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    .why-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
     .svc-page { padding-left: 48px !important; padding-right: 48px !important; }
   }
   @media (min-width: 1100px) {
     .phone { max-width: 960px; }
     .services { grid-template-columns: repeat(3, 1fr) !important; }
     .areas-grid { grid-template-columns: repeat(4, 1fr) !important; }
+    .why-grid { grid-template-columns: repeat(4, 1fr) !important; }
   }
   /* Smooth anchor scrolling for service sub-page links */
   html { scroll-behavior: smooth; }
@@ -594,18 +642,29 @@
   </section>
 
   <!-- Trust strip -->
-  <div class="trust-strip">
-    <div class="g-logo" aria-label="Google">G</div>
-    <div style="flex:1">
-      <div class="stars" aria-label="5 star rating">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+  <div class="trust-strip" aria-label="Trusted across top review platforms">
+    <div class="trust-badge">
+      <div class="tb-logo" aria-hidden="true">G</div>
+      <div class="tb-text">
+        <b>5 Stars on Google</b>
+        <small>Google Reviews</small>
       </div>
-      <b>4.9 on Google</b>
-      <small>Based on 523 verified reviews</small>
+    </div>
+    <div class="trust-badge">
+      <div class="tb-logo angi" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </div>
+      <div class="tb-text">
+        <b>Trusted &amp; Verified by Angi</b>
+        <small>Angi</small>
+      </div>
+    </div>
+    <div class="trust-badge">
+      <div class="tb-logo yelp" aria-hidden="true">Y</div>
+      <div class="tb-text">
+        <b>Loved on Yelp</b>
+        <small>Yelp</small>
+      </div>
     </div>
   </div>
 
@@ -732,74 +791,52 @@
   <!-- REVIEWS -->
   <section style="padding-bottom:16px">
     <span class="eyebrow">Social Proof</span>
-    <h2 class="sec">Loved by 500+ Angelenos.</h2>
-    <div class="reviews-head">
-      <div class="big">4.9</div>
-      <div style="flex:1">
-        <div class="stars">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-        </div>
-        <small>523 reviews · Google · Yelp · Nextdoor</small>
-      </div>
-    </div>
+    <h2 class="sec">What our customers say.</h2>
   </section>
 
   <div class="reviews-rail">
     <div class="review">
-      <div class="stars">
+      <div class="stars" aria-label="5 star rating">
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
       </div>
-      <q>Our panel blew on a Sunday. Sam's crew showed up in under an hour and had power back before dinner. Honest price, no drama.</q>
-      <div class="who"><div class="av">MR</div><div><b>Marisol R.</b><small>Silver Lake · Panel upgrade</small></div></div>
+      <q>Sam is THE BEST!!!! I normally do not have or take the time to write reviews but Sam is truly WELL DESERVING of this 5 star review. If there was an option to give him 10 stars or more, I would definitely give him the maximum stars. I've dealt with so many people from different companies and I've never felt as comfortable and as safe with them as with Sam. There are so many electricians/contractors out there that are just after your money yet they still do a poor job but Sam is very different. He is super honest, reliable, kind, trustworthy, professional, and friendly. He will tell you with all honesty if what you plan to get done in your house is worth paying for or just a waste. Plus he is knowledgeable with what he does. My family and I are not only thankful for the work his done in our house, but we are also extremely grateful for having met Sam as a person. Sam, please know that I will be your customer for life!</q>
+      <div class="who"><div class="av">AC</div><div><b>Amy C.</b><small>via Google</small></div></div>
+      <a class="read-more" href="https://www.google.com/search?q=Service+Sam+Electric" target="_blank" rel="noopener noreferrer">
+        Read full review on Google
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><polyline points="8 7 17 7 17 16"></polyline></svg>
+      </a>
     </div>
     <div class="review">
-      <div class="stars">
+      <div class="stars" aria-label="5 star rating">
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
       </div>
-      <q>Had 3 other quotes for our EV charger. Sam beat them all and finished in a morning. Clean install, permit included.</q>
-      <div class="who"><div class="av">DK</div><div><b>Derek K.</b><small>Burbank · EV charger</small></div></div>
+      <q>Sam is exceptional. His professionalism and expertise are unmatched, and he carries out his work with a genuine smile. What sets him apart is his honesty and the time he takes to explain each step of the process — a rare and much-appreciated quality. He and his crew are incredibly meticulous; you'd never know they were there once the job is done. Sam turned my vision into a stunning reality, and I'm beyond grateful. I've already recommended him to several friends, and if you're looking for a reliable, skilled, and trustworthy electrician, Sam is the one to call.</q>
+      <div class="who"><div class="av">SA</div><div><b>Sherry A.</b><small>via Google</small></div></div>
+      <a class="read-more" href="https://www.google.com/search?q=Service+Sam+Electric" target="_blank" rel="noopener noreferrer">
+        Read full review on Google
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><polyline points="8 7 17 7 17 16"></polyline></svg>
+      </a>
     </div>
     <div class="review">
-      <div class="stars">
+      <div class="stars" aria-label="5 star rating">
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
       </div>
-      <q>I manage 6 rentals. Sam is my first call for anything electrical. Fair pricing, great communication, real pros.</q>
-      <div class="who"><div class="av">AT</div><div><b>Angela T.</b><small>Pasadena · Property mgmt</small></div></div>
+      <q>We have been trying to get lighting done at our home for 2 months, received estimate after estimate. Sam showed up and not only did he give us a price within our budget, but also provided us with peace of mind. Very professional and knowledgeable. I would highly recommend his service. We are extremely happy.</q>
+      <div class="who"><div class="av">EY</div><div><b>Erik Y.</b><small>via Google</small></div></div>
     </div>
   </div>
-
-  <section style="padding-top:18px">
-    <div class="ba">
-      <span class="eyebrow" style="margin-bottom:6px">Before · After</span>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <b style="font-size:14px;color:var(--navy-ink)">Sherman Oaks panel replacement</b>
-        <small style="color:var(--muted);font-size:11px">1 day job</small>
-      </div>
-      <div class="ba-row">
-        <div class="ba-img a"><span class="ba-tag">BEFORE</span>before.jpg — burned 1970s panel</div>
-        <div class="ba-img"><span class="ba-tag y">AFTER</span>after.jpg — new 200A panel</div>
-      </div>
-      <span class="ba-cap">Federal Pacific → 200A Square D upgrade
-        <small>Permit pulled, inspected, and passed same week.</small>
-      </span>
-    </div>
-  </section>
 
   <!-- CTA + FORM -->
   <section id="quote">
@@ -813,7 +850,7 @@
       <div class="or">OR REQUEST ESTIMATE</div>
       <form id="quoteForm" onsubmit="return submitQuote(event)">
         <!-- Web3Forms access key — replace with key registered to Sam@goservicesam.com -->
-        <input type="hidden" name="access_key" value="YOUR_SERVICE_SAM_WEB3FORMS_KEY">
+        <input type="hidden" name="access_key" value="11ac3944-7c91-4632-9b00-2c6071c85345">
         <input type="hidden" name="subject" value="New lead from goservicesam.com">
         <input type="hidden" name="from_name" value="Service Sam Electric Website">
         <input type="hidden" name="redirect" value="false">
@@ -1200,7 +1237,7 @@
   },
   "areaServed":["Los Angeles","Glendale","Burbank","Pasadena","North Hollywood","Van Nuys","Studio City","Sherman Oaks"],
   "openingHours":"Mo-Sa 07:00-21:00",
-  "aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"523"},
+  "aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"10"},
   "identifier":"CA C10 License #1125961"
 }
 </script>
