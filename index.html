@@ -154,6 +154,15 @@
     display:flex;align-items:center;gap:10px;
     padding:8px 10px;border-radius:10px;
     flex:1;min-width:0;
+    text-decoration:none;color:inherit;cursor:pointer;
+    position:relative;z-index:2;
+    transition:transform 180ms ease, box-shadow 180ms ease;
+  }
+  @media (hover:hover){
+    .trust-badge:hover{
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px -8px rgba(11,30,63,.2);
+    }
   }
   .trust-badge .tb-logo{
     width:34px;height:34px;flex:0 0 34px;border-radius:50%;
@@ -161,8 +170,8 @@
     background:#fff;border:1px solid var(--line);overflow:hidden;
   }
   .trust-badge .tb-logo svg{display:block}
-  .trust-badge .tb-text b{display:block;font-size:13px;color:var(--navy-ink);line-height:1.15}
-  .trust-badge .tb-text small{display:block;color:var(--muted);font-size:11px;letter-spacing:.04em;margin-top:2px;text-transform:uppercase;font-weight:600}
+  .trust-badge .tb-text strong{display:block;font-size:13px;color:var(--navy-ink);line-height:1.15;font-weight:700}
+  .trust-badge .tb-text small{display:block;color:var(--muted);font-size:11px;letter-spacing:.08em;margin-top:2px;text-transform:uppercase;font-weight:600}
   @media (min-width:560px){
     .trust-strip{flex-direction:row;align-items:stretch;gap:6px;padding:10px}
     .trust-badge{border-right:1px solid var(--line)}
@@ -709,13 +718,20 @@
   }
   .modal .field input,
   .modal .field select{
-    background:#f6f7fb;color:var(--ink);
+    background-color:#f6f7fb;color:var(--ink);
     border:1.5px solid var(--line);
   }
   .modal .field input::placeholder{color:#8a95ae}
   .modal .field select{
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%230B1E3F' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    padding-right:40px;
+    appearance:none;-webkit-appearance:none;-moz-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1.5L6 6.5L11 1.5' stroke='%230B1E3F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    background-size:12px 8px;
   }
+  .modal .field select:invalid{color:#94a3b8}
+  .modal .field select option{color:#0b1220}
   .modal .field input:focus,
   .modal .field select:focus{outline:none;border-color:var(--blue)}
   .modal .btn-submit{padding:14px;margin-top:4px}
@@ -808,44 +824,44 @@
 
   <!-- Trust strip -->
   <div class="trust-strip" aria-label="Trusted across top review platforms">
-    <div class="trust-badge">
-      <div class="tb-logo" aria-hidden="true">
+    <a class="trust-badge" href="https://share.google/7NwRjGQXGjUnWlkaW" target="_blank" rel="noopener" aria-label="See our 5-star Google reviews">
+      <span class="tb-logo" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
         </svg>
-      </div>
+      </span>
       <div class="tb-text">
-        <b>5 Stars on Google</b>
-        <small>Google Reviews</small>
+        <strong>5 Stars on Google</strong>
+        <small>GOOGLE REVIEWS</small>
       </div>
-    </div>
-    <div class="trust-badge">
-      <div class="tb-logo" aria-hidden="true">
+    </a>
+    <a class="trust-badge" href="https://www.homeadvisor.com/rated.SamsElectricalService.32858483.html" target="_blank" rel="noopener" aria-label="See our Angi / HomeAdvisor profile">
+      <span class="tb-logo" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
           <circle cx="12" cy="12" r="12" fill="#FF6153"/>
           <path fill="#fff" d="M9.2 17h-2l3.4-10h2.8l3.4 10h-2l-.8-2.4h-4zm1.4-4.2h2.8L12 8.4z"/>
         </svg>
-      </div>
+      </span>
       <div class="tb-text">
-        <b>Trusted &amp; Verified by Angi</b>
-        <small>Angi</small>
+        <strong>Trusted &amp; Verified by Angi</strong>
+        <small>ANGI</small>
       </div>
-    </div>
-    <div class="trust-badge">
-      <div class="tb-logo" aria-hidden="true">
+    </a>
+    <a class="trust-badge" href="https://www.yelp.com/biz/service-sam-electric-glendale" target="_blank" rel="noopener" aria-label="See our Yelp reviews">
+      <span class="tb-logo" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
           <circle cx="12" cy="12" r="12" fill="#D32323"/>
           <path fill="#fff" d="M13.5 5.5c-.3-.1-.6.1-.7.4l-1.4 4.6c-.1.4.2.8.6.8l3.1.1c.4 0 .7-.3.6-.7-.2-2.3-.9-4.3-2.2-5.2zm-3 6.1c-.2-.3-.6-.4-.9-.2L6.8 13c-.3.2-.4.6-.2.9.8 1.4 1.9 2.6 3.3 3.4.3.2.7.1.9-.2l1.6-2.7c.2-.3.1-.7-.2-.9zm3.6 1c-.3-.2-.7-.1-.9.2l-1.6 2.7c-.2.3-.1.7.2.9 1.2.5 2.5.8 3.8.8.4 0 .7-.3.7-.7l-.1-3.1c0-.3-.3-.6-.7-.6zm3.7-2.8c-.1-.3-.4-.5-.8-.4l-3 .8c-.3.1-.5.5-.4.8.6 1.5 1.7 2.8 3.1 3.6.3.2.7 0 .8-.3.5-1.4.6-3 .3-4.5z"/>
         </svg>
-      </div>
+      </span>
       <div class="tb-text">
-        <b>Loved on Yelp</b>
-        <small>Yelp</small>
+        <strong>Loved on Yelp</strong>
+        <small>YELP</small>
       </div>
-    </div>
+    </a>
   </div>
 
   <!-- WHY -->
