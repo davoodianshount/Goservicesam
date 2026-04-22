@@ -1,0 +1,98 @@
+From: Service Sam Electric schema cleanup
+Subject: [PATCH] Fix JSON-LD schema bugs (image URL, aggregateRating, sameAs, geo)
+
+The existing schema has three issues that can trip Google's structured-data
+validator and one that risks a manual action for inflated review counts:
+
+1. `image` is a base64 data: URI — Google's parser requires a URL.
+2. `aggregateRating.reviewCount: 10` doesn't match the 3 reviews visible on
+    the page, and inflating counts is against Google's structured-data
+    policy (can trigger a manual action that removes rich results sitewide).
+3. No `sameAs` — Google uses this for entity resolution between the site,
+    the Google Business Profile, and third-party review platforms.
+4. No `geo` coordinates — helpful for local search ranking.
+5. No `@id` anchor — needed so Service schema on sub-pages can reference
+    this business as their `provider`.
+
+This patch also adds `hasOfferCatalog` listing all services so that sub-pages
+can be discovered through the main entity.
+
+Before merging: set `reviewCount` below to the REAL current count from the
+Google Business Profile (must be <= reviews available on page or linked GBP;
+when in doubt, set to the on-page count of 3).
+---
+ index.html | 77 ++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 2 deletions(-)
+
+diff --git a/index.html b/index.html
+--- a/index.html
++++ b/index.html
+@@ -1648,20 +1648,93 @@
+ <script type="application/ld+json">
+ {
+   "@context":"https://schema.org",
+   "@type":"Electrician",
++  "@id":"https://goservicesam.com/#business",
+   "name":"Service Sam Electric",
+-  "image":"data:image/png;base64,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",
++  "image":"https://goservicesam.com/assets/og-image.png",
++  "logo":"https://goservicesam.com/assets/icon-512.png",
+   "url":"https://goservicesam.com",
+   "telephone":"+1-818-934-2824",
+   "email":"Sam@goservicesam.com",
+   "founder":"Sam Davoodian",
+   "priceRange":"$$",
++  "currenciesAccepted":"USD",
++  "paymentAccepted":"Cash, Credit Card, Check",
+   "address":{
+     "@type":"PostalAddress",
+     "streetAddress":"121 W Lexington Dr, Suite V100",
+     "addressLocality":"Glendale",
+     "addressRegion":"CA",
+     "postalCode":"91203",
+     "addressCountry":"US"
+   },
++  "geo":{
++    "@type":"GeoCoordinates",
++    "latitude":34.1468,
++    "longitude":-118.2560
++  },
+   "areaServed":["Los Angeles","Glendale","Burbank","Pasadena","North Hollywood","Van Nuys","Studio City","Sherman Oaks"],
++  "hasMap":"https://maps.google.com/?q=Service+Sam+Electric+121+W+Lexington+Dr+Glendale+CA",
+   "openingHours":"Mo-Sa 07:00-21:00",
+-  "aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"10"},
+-  "identifier":"CA C10 License #1125961"
++  "openingHoursSpecification":[{
++    "@type":"OpeningHoursSpecification",
++    "dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
++    "opens":"07:00",
++    "closes":"21:00"
++  }],
++  "sameAs":[
++    "https://share.google/7NwRjGQXGjUnWlkaW",
++    "https://www.yelp.com/biz/service-sam-electric-glendale",
++    "https://www.homeadvisor.com/rated.SamsElectricalService.32858483.html"
++  ],
++  "aggregateRating":{
++    "@type":"AggregateRating",
++    "ratingValue":"5.0",
++    "reviewCount":"3",
++    "bestRating":"5",
++    "worstRating":"5"
++  },
++  "identifier":"CA C10 License #1125961",
++  "hasOfferCatalog":{
++    "@type":"OfferCatalog",
++    "name":"Electrical Services",
++    "itemListElement":[
++      {"@type":"Offer","itemOffered":{"@type":"Service","name":"Emergency Electrical Repair","url":"https://goservicesam.com/services/emergency-electrical"}},
++      {"@type":"Offer","itemOffered":{"@type":"Service","name":"Electrical Panel Upgrade","url":"https://goservicesam.com/services/panel-upgrade"}},
++      {"@type":"Offer","itemOffered":{"@type":"Service","name":"EV Charger Installation","url":"https://goservicesam.com/services/ev-charger-installation"}},
++      {"@type":"Offer","itemOffered":{"@type":"Service","name":"Whole-Home Rewiring","url":"https://goservicesam.com/services/whole-home-rewiring"}},
++      {"@type":"Offer","itemOffered":{"@type":"Service","name":"Electrical Troubleshooting","url":"https://goservicesam.com/services/troubleshooting"}},
++      {"@type":"Offer","itemOffered":{"@type":"Service","name":"Lighting Installation","url":"https://goservicesam.com/services/lighting-installation"}},
++      {"@type":"Offer","itemOffered":{"@type":"Service","name":"Commercial Electrical","url":"https://goservicesam.com/services/commercial-electrical"}}
++    ]
++  }
+ }
+ </script>
