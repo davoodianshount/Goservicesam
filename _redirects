@@ -1,6 +1,0 @@
-# Redirect www to apex (canonical non-www)
-https://www.goservicesam.com/* https://goservicesam.com/:splat 301!
-
-# HTTP to HTTPS enforced automatically by Cloudflare, but belt + suspenders:
-http://goservicesam.com/*     https://goservicesam.com/:splat 301!
-http://www.goservicesam.com/* https://goservicesam.com/:splat 301!
