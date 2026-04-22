@@ -192,6 +192,18 @@ The submit handler shows a success state inline (no redirect) and clears the for
 
 ---
 
+## Addendum: Homepage surfacing of `/safety-check`
+
+After the initial package, the safety-check URL was added in **three** places on the site so it's genuinely discoverable:
+
+1. **Above-the-fold dashed link** under the hero stats: *"Not sure about your panel? Free photo check →"*. Visible on first render on any screen size.
+2. **Yellow callout band** between the Services grid and the Area section — hard to miss, uses the brand yellow for "free/urgent" signal without competing with the main navy hero.
+3. **Footer legal line** (already there) — long-tail discoverability for users who scroll all the way.
+
+If you want a fourth touchpoint, adding the safety-check link as a secondary CTA on `/services/panel-upgrade` (right under the hero price band) is the highest-leverage remaining placement — people who clicked through to the panel page may not yet be ready to quote but are one step from uploading a photo. Ten-minute addition; say the word.
+
+---
+
 ## Quick rollback
 
 If anything goes sideways post-deploy:
